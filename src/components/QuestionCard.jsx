@@ -4,7 +4,7 @@ import "./QuestionCard.css";
 import { useDispatch } from "react-redux";
 import { addAnswer } from "../redux/quizReducer";
 
-function QuestionCard({ question }) {
+function QuestionCard({ question, quizId }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
 
@@ -34,7 +34,13 @@ function QuestionCard({ question }) {
     setSelectedAnswer(selectedValue);
 
     // Dispatch the selected answer immediately
-    dispatch(addAnswer({ questionId: question.id, answer: selectedValue }));
+    dispatch(
+      addAnswer({
+        quizId: quizId,
+        questionId: question.id,
+        answer: selectedValue,
+      })
+    );
   };
 
   const [timer, setTimer] = useState(0);
