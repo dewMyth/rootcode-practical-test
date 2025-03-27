@@ -10,6 +10,7 @@
 
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./authReducer";
+import quizReducer from "./quizReducer";
 import storage from "redux-persist/lib/storage";
 import { persistReducer, persistStore } from "redux-persist";
 import { combineReducers } from "redux";
@@ -21,6 +22,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   auth: persistReducer(persistConfig, authReducer),
+  quiz: persistReducer(persistConfig, quizReducer),
 });
 
 const store = configureStore({
