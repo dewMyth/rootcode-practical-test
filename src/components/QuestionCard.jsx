@@ -11,10 +11,12 @@ function QuestionCard({ question }) {
   const dispatch = useDispatch();
 
   const handleOpenModal = () => {
+    resetTimer();
     setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
+    resetTimer();
     setIsModalOpen(false);
   };
 
@@ -34,13 +36,21 @@ function QuestionCard({ question }) {
   };
 
   const [timer, setTimer] = useState(0);
+  const [isRunning, setIsRunning] = useState(true);
   useEffect(() => {
+    if (!isRunning) return;
+
     const interval = setInterval(() => {
       setTimer((prevCount) => prevCount + 1);
     }, 1000);
 
     return () => clearInterval(interval);
-  });
+  }, [isRunning]);
+
+  const resetTimer = () => {
+    setTimer(0);
+    setIsRunning(true); // Restart the timer
+  };
 
   return (
     <div>
