@@ -15,15 +15,16 @@ const filterByLang = [
 
 function HomePage() {
   const user = useSelector((state) => state.auth.user);
+  const completed = useSelector((state) => state.quiz.quizData);
 
   const [quizList, setQuizList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState(null);
 
-  useEffect(() => {
-    console.log(filter);
+  const [completedStats, setCompletedStats] = useState(null);
 
+  useEffect(() => {
     const fetchQuizzes = async () => {
       let response;
 
@@ -52,6 +53,24 @@ function HomePage() {
 
     fetchQuizzes();
   }, [filter]);
+
+  // // Calculate Fully completed
+  useEffect(() => {
+    const func = () => {
+      const data = quizList.map((q) => {
+        return {
+          quizId: q.id,
+          allQuestions: q.questions.length,
+          completedInthis: completed?.filter((c) => c.quizId == q.id).length,
+          isCompleted:
+            q.questions.length ==
+            completed?.filter((c) => c.quizId == q.id).length,
+        };
+      });
+      setCompletedStats(data);
+    };
+    func();
+  }, [quizList, completed]);
 
   return (
     <>
@@ -103,7 +122,16 @@ function HomePage() {
           ) : error ? (
             <p className="text-danger text-center">{error}</p>
           ) : quizList.length > 0 ? (
-            quizList.map((quiz) => <QuizCard key={quiz.id} quiz={quiz} />)
+            quizList.map((quiz) => (
+              <QuizCard
+                key={quiz.id}
+                quiz={quiz}
+                status={
+                  completedStats?.find((cs) => cs.quizId == quiz.id)
+                    ?.isCompleted
+                }
+              />
+            ))
           ) : (
             <p className="text-center">No quizzes available.</p>
           )}
