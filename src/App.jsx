@@ -7,19 +7,18 @@ import QuizPage from "./pages/quizPage";
 
 import { Routes, Route } from "react-router";
 
+import { useSelector } from "react-redux";
+
 function App() {
-  const isLoggedIn = false; // Check if user exists
+  const user = useSelector((state) => state.auth.user);
 
   return (
     <Routes>
-      <Route
-        path="/login"
-        element={!isLoggedIn ? <LoginPage /> : <HomePage />}
-      />
-      <Route path="/" element={isLoggedIn ? <HomePage /> : <LoginPage />} />
+      <Route path="/login" element={!user ? <LoginPage /> : <HomePage />} />
+      <Route path="/" element={user ? <HomePage /> : <LoginPage />} />
       <Route
         path="/quiz/:quizId"
-        element={isLoggedIn ? <QuizPage /> : <LoginPage />}
+        element={user ? <QuizPage /> : <LoginPage />}
       />
     </Routes>
   );

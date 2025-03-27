@@ -1,10 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { login } from "../redux/authReducer";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailInvalid, setEmailInvalid] = useState(false);
+
+  const dispatch = useDispatch();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -28,7 +32,8 @@ function LoginPage() {
       userCredentials
     );
 
-    if (response) {
+    if (response && response.data) {
+      dispatch(login(response.data));
       alert("Login successful!");
     } else {
       alert("Login failed. Please try again.");
