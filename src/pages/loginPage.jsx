@@ -21,19 +21,19 @@ function LoginPage() {
       password: password,
     };
 
-    // Login API
-    // ** NOTE:-
-    // Given API (https://reqres.in/api/login) is giving unrelated data about colors, not related to users when I checked it.
-    // Tried to reach the Tel. No given for support, but it was not reachable.
-    // So, Insetad I have used the API (https://reqres.in/api/users/2) to get the user data.
-
     const response = await axios.post(
-      `https://reqres.in/api/users/2`,
+      `https://reqres.in/api/login`,
       userCredentials
     );
 
-    if (response && response.data) {
-      dispatch(login(response.data));
+    if (response) {
+      const loggedInUser = {
+        email: email,
+        token: response.data.token,
+      };
+
+      dispatch(login(loggedInUser));
+
       alert("Login successful!");
     } else {
       alert("Login failed. Please try again.");
