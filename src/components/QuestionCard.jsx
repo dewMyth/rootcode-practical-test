@@ -30,9 +30,11 @@ function QuestionCard({ question }) {
 
   const handleOptionChange = (e) => {
     e.preventDefault();
-    setSelectedAnswer(e.target.value);
+    const selectedValue = e.target.value;
+    setSelectedAnswer(selectedValue);
 
-    dispatch(addAnswer({ questionId: question.id, answer: selectedAnswer }));
+    // Dispatch the selected answer immediately
+    dispatch(addAnswer({ questionId: question.id, answer: selectedValue }));
   };
 
   const [timer, setTimer] = useState(0);
@@ -89,7 +91,7 @@ function QuestionCard({ question }) {
                           name="question"
                           value={option}
                           onChange={handleOptionChange}
-                          checked={selectedAnswer === option}
+                          checked={selectedAnswer == option}
                           id={`option-${index}`}
                         />
                         <label

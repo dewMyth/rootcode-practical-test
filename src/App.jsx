@@ -18,7 +18,7 @@ function App() {
       <Route path="/" element={user ? <HomePage /> : <LoginPage />} />
       <Route
         path="/quiz/:quizId"
-        element={user ? <QuizPage /> : <LoginPage />}
+        element={user ? <QuizPage /> : <HomePage />}
       />
     </Routes>
   );
