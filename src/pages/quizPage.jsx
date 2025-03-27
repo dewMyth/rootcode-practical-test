@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 
-import { useParams } from "react-router";
+import { useParams, Link } from "react-router";
 import QuestionCard from "../components/QuestionCard";
 
 import { useDispatch } from "react-redux";
@@ -18,10 +18,9 @@ function QuizPage() {
 
   const [progress, setProgress] = useState(0);
 
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
-  const completed = useSelector((state) => state.quiz.answers);
-  console.log("comp", completed);
+  const completed = useSelector((state) => state.quiz.quizData);
 
   useEffect(() => {
     const fetchTheQuiz = async () => {
@@ -31,11 +30,21 @@ function QuizPage() {
 
       if (response && response.status == 200) {
         setQuiz(response.data.data[0]);
+
+        // COmpleted for this quiz
+        const completedForThisQuiz = completed.filter(
+          (q) => q.quizId == quizId
+        );
+
+        console.log("completedForThisQuiz", completedForThisQuiz);
+
         setProgress(
-          (completed.length / response.data.data[0].questions.length) * 100
+          (completedForThisQuiz?.length /
+            response.data.data[0].questions?.length) *
+            100
         );
         console.log(response.data.data[0].questions.length);
-        dispatch(setQuizId(response.data.data[0].id));
+        // dispatch(setQuizId(response.data.data[0].id));
         setLoading(false);
       } else {
         setError(`Failed to fetch questions for ${quizId}`);
@@ -49,8 +58,11 @@ function QuizPage() {
   return (
     <>
       <div className="container mt-5">
-        <h1>{quiz?.challenge}</h1> <span>{quiz?.level}</span>
-        <p>Progress</p>
+        <Link to={`/`}>Back</Link>
+        <h1>
+          {quiz?.challenge} ({quiz?.level})
+        </h1>
+        <p>Your Progress for this quiz</p>
         <div className="progress">
           <div
             className="progress-bar"
@@ -60,7 +72,7 @@ function QuizPage() {
             aria-valuemin="0"
             aria-valuemax="100"
           >
-            {progress}%
+            {progress}% COMPLETED
           </div>
         </div>
         <br />
@@ -71,7 +83,13 @@ function QuizPage() {
             <p className="text-danger text-center">{error}</p>
           ) : quiz.questions.length > 0 ? (
             quiz.questions.map((question) => {
-              return <QuestionCard key={question.id} question={question} />;
+              return (
+                <QuestionCard
+                  key={question.id}
+                  question={question}
+                  quizId={quizId}
+                />
+              );
             })
           ) : (
             <p className="text-center">No quizzes available.</p>

@@ -1,32 +1,30 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  quizId: null,
-  answers: [],
+  quizData: [],
+  // { quizId, questionId, answer }
 };
 
 const quizSlice = createSlice({
   name: "quiz",
   initialState,
   reducers: {
-    setQuizId: (state, action) => {
-      state.quizId = action.payload;
-    },
     addAnswer: (state, action) => {
-      const { questionId, answer } = action.payload;
+      const { quizId, questionId, answer } = action.payload;
 
-      if (!Array.isArray(state.answers)) {
+      if (!Array.isArray(state.quizData)) {
         state.answers = [];
       }
 
-      const existingAnswer = state.answers.find(
-        (ans) => ans.questionId === questionId
+      const existingAnswer = state.quizData.find(
+        (qd) => qd.questionId === questionId && qd.quizId === quizId
       );
 
       if (existingAnswer) {
         existingAnswer.answer = answer;
       } else {
-        state.answers.push({ questionId, answer });
+        console.log(state.quizData);
+        state.quizData.push({ quizId, questionId, answer });
       }
     },
     removeAnswer: (state, action) => {
