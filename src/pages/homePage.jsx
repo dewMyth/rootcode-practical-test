@@ -23,6 +23,7 @@ function HomePage() {
   const [filter, setFilter] = useState(null);
 
   const [completedStats, setCompletedStats] = useState(null);
+  const [totalComplete, setTotalComplete] = useState(0);
 
   useEffect(() => {
     const fetchQuizzes = async () => {
@@ -72,6 +73,15 @@ function HomePage() {
     func();
   }, [quizList, completed]);
 
+  useEffect(() => {
+    const getTotalComplete = () => {
+      setTotalComplete(
+        completedStats?.filter((cs) => cs.isCompleted == true).length
+      );
+    };
+    getTotalComplete();
+  }, [quizList, completed]);
+
   return (
     <>
       <div className="container mt-5">
@@ -79,7 +89,11 @@ function HomePage() {
         <h2 className="text-left mb-4">Welcome to the Quiz App</h2>
         <br />
 
-        <div className="mb-4">
+        <button className="btn btn-success w-100">
+          You totally completed : {totalComplete} quizzes
+        </button>
+
+        <div className="mt-4 mb-4">
           <label htmlFor="filter" className="form-label">
             Filter Quizzes by Language:
           </label>
